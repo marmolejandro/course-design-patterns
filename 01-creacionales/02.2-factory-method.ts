@@ -35,19 +35,27 @@ interface Report {
 // Implementar SalesReport e InventoryReport
 
 class SalesReport implements Report {
-  // TODO: implementar el método e imprimir en consola:
-  // 'Generando reporte de ventas...'
+  generate(): void {
+    console.log('%cGenerando reporte de ventas...', COLORS.red);
+  }
 }
 
 class InventoryReport implements Report {
-  // TODO: implementar el método e imprimir en consola:
-  // 'Generando reporte de inventario...'
+  generate(): void {
+    console.log('%cGenerando reporte de inventario...', COLORS.green);
+  }
+}
+
+class AccountingReport implements Report {
+  generate(): void {
+    console.log('%cGenerando reporte contable...', COLORS.blue);
+  }
 }
 
 // 3. Clase Base ReportFactory con el Método Factory
 
 abstract class ReportFactory {
-  abstract createReport(): Report;
+  protected abstract createReport(): Report;
 
   generateReport(): void {
     const report = this.createReport();
@@ -56,31 +64,34 @@ abstract class ReportFactory {
 }
 
 // 4. Clases Concretas de Fábricas de Reportes
-
 class SalesReportFactory extends ReportFactory {
   createReport(): Report {
-    throw new Error('Method not implemented.');
+    return new SalesReport();
   }
 }
 
 class InventoryReportFactory extends ReportFactory {
   createReport(): Report {
-    throw new Error('Method not implemented.');
+    return new InventoryReport();
+  }
+}
+
+class AccountingReportFactory extends ReportFactory {
+  createReport(): Report {
+    return new AccountingReport();
   }
 }
 
 // 5. Código Cliente para Probar
-
 function main() {
   let reportFactory: ReportFactory;
 
-  const reportType = prompt(
-    '¿Qué tipo de reporte deseas? %c(sales/inventory)',
-    COLORS.red
-  );
+  const reportType = prompt('¿Qué tipo de reporte deseas? (sales/inventory/accounting)');
 
   if (reportType === 'sales') {
     reportFactory = new SalesReportFactory();
+  } else if (reportType === 'accounting') {
+    reportFactory = new AccountingReportFactory();
   } else {
     reportFactory = new InventoryReportFactory();
   }
